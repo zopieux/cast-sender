@@ -262,6 +262,7 @@ pub struct RefreshCredentialsRequestData {}
 #[builder(setter(strip_option, into), default)]
 pub struct RequestData {
     pub media_session_id: Option<i32>,
+    pub custom_data: Option<serde_json::Value>,
 }
 
 #[skip_serializing_none]
@@ -536,6 +537,7 @@ pub struct MediaInformation {
     pub tracks: Option<Vec<Track>>,
     pub user_action_states: Option<Vec<UserActionState>>,
     pub vmap_ads_request: Option<VastAdsRequest>,
+    pub custom_data: Option<serde_json::Value>,
 }
 
 #[skip_serializing_none]

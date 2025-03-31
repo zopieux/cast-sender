@@ -59,6 +59,26 @@ impl MediaController {
                 &self.app,
                 Media::Play(RequestData {
                     media_session_id: Some(*self.media_session_id.lock().await),
+                    custom_data: None,
+                }),
+            )
+            .await?;
+
+        Self::handle_error(&response)?;
+        Ok(())
+    }
+
+    pub async fn start_custom<T>(&self, custom_data: T) -> Result<(), Error>
+    where
+        T: serde::Serialize,
+    {
+        let response = self
+            .receiver
+            .send_request(
+                &self.app,
+                Media::Play(RequestData {
+                    media_session_id: Some(*self.media_session_id.lock().await),
+                    custom_data: Some(serde_json::to_value(custom_data)?),
                 }),
             )
             .await?;
@@ -74,6 +94,7 @@ impl MediaController {
                 &self.app,
                 Media::Stop(RequestData {
                     media_session_id: Some(*self.media_session_id.lock().await),
+                    ..Default::default()
                 }),
             )
             .await?;
@@ -89,6 +110,7 @@ impl MediaController {
                 &self.app,
                 Media::Pause(RequestData {
                     media_session_id: Some(*self.media_session_id.lock().await),
+                    ..Default::default()
                 }),
             )
             .await?;
